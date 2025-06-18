@@ -1,0 +1,300 @@
+/* Kurdish Classic Clothes Inspired Style – Gold & Coffee Edition */
+
+/* Import fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Scheherazade&display=swap');
+
+/* ---------- GLOBAL LAYOUT ---------- */
+:root{
+  --gold:#777272;
+  --gold-light:#000000;
+  --coffee:#d1bc48;
+  --coffee-dark:#2b1a12;
+  --coffee-light:#ff0000;
+  --text-gold:#000000;
+}
+
+*,
+*::before,
+*::after{box-sizing:border-box}
+
+html,body{min-height:100%}
+
+body {
+  font-family: 'Poppins', 'Scheherazade', Arial, serif;
+  background-image: url('farsh1.jpg'); /* fallback background */
+
+}
+
+.menu-box {
+ 
+  max-width: 700px;
+  width: 100%;
+  margin: clamp(1rem, 4vw, 2.5rem) auto;
+  padding: 0 clamp(1rem, 4vw, 1.5rem);
+  background: url('Back.png') center/cover no-repeat fixed;
+  color: #ffffff;
+  border: 6px double #fff;
+  border-radius: 15px;
+  box-shadow: inset 0 0 15px 5px #444, 0 0 30px rgba(255, 255, 255, 0.1);
+  
+}
+
+
+/* Force all text inside body to white */
+body, body * {
+  color: #ffffff !important;
+  
+}
+
+/* Gold coffee‑cup watermark */
+
+
+
+/* ---------- HEADER ---------- */
+/*
+header{
+  text-align:center;
+  margin-bottom:clamp(1rem,4vw,1.5rem);
+  padding:clamp(.8rem,3vw,1.2rem) 0;
+  position:relative;
+  background:url('img/farsh.jpg') center;
+  color:#ffffff; 
+  border-radius:12px;
+  box-shadow:0 4px 8px rgba(247, 246, 245, 0.55);
+}*/
+
+
+#appName{
+  font-size:clamp(1.8rem,6vw,2.8rem);
+  font-weight:400;
+  font-size: 70px ;
+  letter-spacing:2px;
+  color:#ffffff; /* white */
+  text-shadow:0 0 5px rgba(255,255,255,.6);
+}
+#tagline{
+  font-size:clamp(1rem,4.5vw,1.35rem);
+  letter-spacing:1.5px;
+  color:#ffffff; /* white */
+}
+
+/* ---------- LANGUAGE SELECTOR – simplified ---------- */
+#langSelect{
+  appearance:auto;                       /* keep native arrow */
+  margin:clamp(1rem,4vw,1.5rem) 0 clamp(1.2rem,5vw,2.4rem);
+  min-height:44px;                       /* finger‑friendly */
+  padding:0 1rem;
+  font-size:clamp(.95rem,3.5vw,1.1rem);
+  font-weight:600;
+  border:2px solid var(--gold);
+  border-radius:12px;
+  background:var(--coffee);
+  color:#ffffff; /* white text */
+  transition:background .25s ease,border-color .25s ease;
+}
+#langSelect:hover{background:var(--coffee-light)}
+#langSelect:focus{
+  outline:none;
+  border-color:var(--gold-light);
+  box-shadow:0 0 0 3px rgba(0, 0, 0, 0.5);
+}
+
+/* ---------- MODERN FLAT BUTTONS ---------- */
+button {
+  font-family:'Poppins','Scheherazade',Arial,serif;
+  font-weight:600;
+  border-radius:10px;
+  border:none;
+  cursor:pointer;
+  padding:clamp(.55rem,2vw,.72rem) clamp(1.2rem,4.5vw,1.6rem);
+  transition:background .25s ease,transform .18s ease,box-shadow .25s;
+  color: #ffffff; /* white text */
+  background: #272727; /* changed button bg color to dark teal */
+  box-shadow: 0 2px 4px rgba(0,95,115,.6), 0 4px 12px rgba(0,95,115,.8);
+}
+button:hover {
+  background: #ff0000; /* lighter teal on hover */
+  transform: translateY(-2px);
+  box-shadow: 0 3px 5px #eb3406, 0 6px 14px rgb(255, 0, 0);
+}
+button:active {
+  background: #001219; /* very dark teal on active */
+  box-shadow: 0 1px 2px rgba(0,18,25,.8) inset, 0 2px 6px rgba(0,18,25,.9);
+  transform: translateY(0);
+}
+
+/* ---------- SECONDARY BUTTONS ---------- */
+#filterButtons button,
+#adminBtn,
+#logoutBtn {
+  background: #003d4c; /* dark slate blue */
+  color: #ffffff;
+  border: 2px solid transparent;
+  box-shadow: 0 2px 4px rgba(0,61,76,.7), 0 4px 12px rgba(0,61,76,.5);
+}
+#filterButtons button:hover,
+#adminBtn:hover,
+#logoutBtn:hover {
+  background: #ff0000; /* lighter slate blue on hover */
+}
+#filterButtons button.active {
+  background: #e0250c; /* main button bg */
+  color: #000000;
+  border: 2px solid #0a9396;
+}
+
+/* ---------- FILTER BUTTONS LAYOUT ---------- */
+#filterButtons {
+  margin:clamp(14px,4vw,20px) 0;
+  display:flex;
+  flex-wrap:wrap;
+  gap:clamp(8px,3vw,14px);
+  justify-content:center;
+}
+#filterButtons button {
+  font-size:clamp(.8rem,3vw,.98rem);
+  text-transform:uppercase;
+  padding:clamp(6px,1.8vw,8px) clamp(15px,4vw,20px);
+  border-radius:999px;
+}
+
+/* ---------- MENU SECTIONS ---------- */
+.menu-section {
+  margin-bottom:clamp(1.8rem,6vw,3rem);
+  border-bottom:3px dotted var(--gold);
+  padding-bottom:clamp(.8rem,3vw,1.3rem);
+}
+.menu-section h2 {
+  font-size:clamp(1.4rem,5vw,2rem);
+  margin-bottom:clamp(.6rem,2.5vw,1.3rem);
+  color: #ffffff; /* white */
+  letter-spacing:1.6px;
+  font-weight:600;
+  text-shadow:0 0 6px rgba(212,175,55,.8);
+}
+
+/* ---------- MENU ITEMS ---------- */
+html[dir="rtl"] .menu-section {
+  margin-bottom:clamp(1.8rem,6vw,3rem);
+  border-bottom:3px dotted var(--gold);
+  padding-bottom:clamp(.8rem,3vw,1.3rem);
+}
+html[dir="rtl"] .menu-section h2 {
+  font-size:clamp(1.4rem,5vw,2rem);
+  margin-bottom:clamp(.6rem,2.5vw,1.3rem);
+  color: #ffffff; /* white */
+  letter-spacing:1.6px;
+  font-weight:600;
+  text-shadow:0 0 6px rgba(212,175,55,.8);
+}
+
+html[dir="rtl"] .menu-item {
+  display: flex;
+  align-items: center;
+  margin: 0.5rem 0;
+  padding: 0.4rem 0.7rem;
+  border-radius: 10px;
+  flex-wrap: wrap;
+}
+html[dir="rtl"] .menu-item .item-name {
+  flex: 1;
+  min-width: 35%;
+   font-size: clamp(1.5rem, 3.5vw, 1.15rem);
+  font-weight: 700;
+  text-align: right;
+}
+html[dir="rtl"] .menu-item .price {
+  flex: 1;
+  min-width: 35%;
+  font-size: clamp(0.95rem, 3.5vw, 1.15rem);
+  font-weight: 700;
+  text-align: left;
+}
+
+html[dir="rtl"] header .appName {
+  font-size: clamp(1.8rem, 6vw, 2.8rem);
+  font-weight: 800;
+  text-align: center;
+}
+
+html[dir="rtl"] header .tagline {
+  font-size: 2rem;
+  font-weight: 800;
+  text-align: center;
+}
+
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  margin: 0.5rem 0;
+  padding: 0.4rem 0.7rem;
+  border-radius: 10px;
+  flex-wrap: wrap;
+}
+ .menu-item .item-name {
+  flex: 1;
+  min-width: 35%;
+  font-size: clamp(1.5rem, 3.5vw, 1.15rem);
+  font-weight: 700;
+  text-align: left;
+}
+ .menu-item .price {
+  flex: 1;
+  min-width: 35%;
+  font-size: clamp(0.95rem, 3.5vw, 1.15rem);
+  font-weight: 700;
+  text-align: right;
+}
+header .appName {
+  font-size: clamp(1.8rem, 6vw, 2.8rem);
+  font-weight: 800;
+  text-align: center;
+}
+
+ header .tagline {
+  font-size: 2rem;
+  font-weight: 800;
+  text-align: center;
+}
+/* ---------- ADMIN PANEL / FORM (unchanged except text color) ---------- */
+#adminPanel {
+  background:rgba(0,0,0,.35);
+  border:4px double var(--gold);
+  border-radius:15px;
+  padding:clamp(1.2rem,5vw,2rem);
+  box-shadow:0 0 18px rgba(212,175,55,.35);
+  color:#353333; /* white text */
+}
+#adminPanel input,
+#adminPanel select {
+  padding:.6rem 1rem;
+  font-size:clamp(.95rem,3.5vw,1.1rem);
+  border:2px solid var(--gold);
+  border-radius:10px;
+  background:rgba(0,0,0,.45);
+  color:#645454; /* white */
+  box-shadow:inset 0 0 6px rgba(212,175,55,.35);
+}
+#adminPanel button {
+  margin-top:.5rem;
+  width:100%;
+}
+
+/* ---------- FOOTER ---------- */
+footer {
+  text-align:center;
+  margin-top:clamp(2rem,7vw,3.5rem);
+  color:#ffffff; /* white */
+  letter-spacing:2px;
+  font-size:clamp(.9rem,3.2vw,1.05rem);
+  border-top:3px solid var(--gold);
+  padding-top:clamp(.8rem,3vw,1.2rem);
+}
+
+/* ---------- ULTRA‑SMALL SCREEN FIX ---------- */
+@media(max-width:360px){
+  header::before,header::after{display:none}
+  #filterButtons{gap:4px}
+  button,#filterButtons button{padding:.4rem .9rem;font-size:.78rem}
+}
