@@ -8,7 +8,7 @@
   --coffee:      #444342;
   --coffee-dark: #2b1a12;
   --coffee-light:#c49a6c;  /* toned‑down from pure red for accessibility */
-  --text-gold:   #ffd000;
+  --text-gold:   #ffffff;
 
   /* spacing & radii */
   --radius-sm: 10px;
@@ -109,6 +109,7 @@ header > * { margin-block: .25rem; }
    Buttons & Filters
    ========================================= */
 button {
+   color: #ffd000 !important;
   font-family: inherit;
   font-weight: 600;
   font-size: clamp(0.90rem, 3vw, 1.1rem);
@@ -265,6 +266,7 @@ footer {
   padding-block-start: clamp(.8rem, 3vw, 1.2rem);
 }
 #langSelect {
+    color: #ffd000 !important;
   appearance: auto;
   margin-block: clamp(1rem, 4vw, 1.5rem) clamp(1.2rem, 5vw, 2.4rem);
   min-height: 45px; /* Reduced from 56px */
@@ -279,7 +281,7 @@ footer {
 }
 
 #langSelect:hover {
-  background: #fbf0d8;
+    color: #ffd000 !important;
 }
 
 #langSelect:focus {
