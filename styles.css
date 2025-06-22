@@ -168,7 +168,7 @@ button,
   padding-block-end: clamp(.8rem, 3vw, 1.3rem);
 }
 .menu-section h2 {
-  color: var(--text-gold);
+  color: #ffd000 !important;
     font-size: clamp(2.3rem, 5.2vw, 3.8rem);
   margin-block-end: clamp(.6rem, 2.5vw, 1.3rem);
   letter-spacing: 1.6px;
@@ -176,7 +176,7 @@ button,
   text-shadow: 0 0 6px rgba(212, 175, 55, .8);
 }
 [dir="rtl"] .menu-section h2 {
-  color: var(--text-gold);
+  color: #ffd000 !important;
    font-size: clamp(2.3rem, 5.2vw, 3.8rem);
   margin-block-end: clamp(.6rem, 2.5vw, 1.3rem);
   letter-spacing: 1.6px;
