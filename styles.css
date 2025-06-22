@@ -1,300 +1,334 @@
-/* Kurdish Classic Clothes Inspired Style – Gold & Coffee Edition */
-
-/* Import fonts */
+/* Kurdish Classic Clothes Inspired Style – Gold & Coffee Edition (Responsive Rewrite) */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Scheherazade&display=swap');
 
-/* ---------- GLOBAL LAYOUT ---------- */
-:root{
-  --gold:#777272;
-  --gold-light:#000000;
-  --coffee:#d1bc48;
-  --coffee-dark:#2b1a12;
-  --coffee-light:#ff0000;
-  --text-gold:#000000;
+:root {
+  /* palette */
+  --gold:        #665454;
+  --gold-light:  #8d7b7b;
+  --coffee:      #444342;
+  --coffee-dark: #2b1a12;
+  --coffee-light:#c49a6c;  /* toned‑down from pure red for accessibility */
+  --text-gold:   #ffd000;
+
+  /* spacing & radii */
+  --radius-sm: 10px;
+  --radius-md: 15px;
+  --radius-lg: 24px;
+
+  /* breakpoints */
+  --bp-xs: 480px;
+  --bp-sm: 640px;
+  --bp-md: 768px;
+  --bp-lg: 1024px;
+  --bp-xl: 1280px;
 }
 
-*,
-*::before,
-*::after{box-sizing:border-box}
-
-html,body{min-height:100%}
+/* =========================================
+   Base & Resets
+   ========================================= */
+*, *::before, *::after { box-sizing: border-box; }
+html                 { font-size: clamp(100%, 0.7rem + 0.5vw, 120%); }
+html, body           { min-height: 100%; margin: 0; padding: 0; }
 
 body {
   font-family: 'Poppins', 'Scheherazade', Arial, serif;
-  background-image: url('farsh1.jpg'); /* fallback background */
-
+  background: #0f0f0f;
+  color: var(--text-gold);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
 }
 
+/* Force body text colour throughout (avoid inline overrides) */
+body, body * { color: var(--text-gold) !important; }
+
+/* =========================================
+   Layout Containers
+   ========================================= */
 .menu-box {
- 
-  max-width: 700px;
-  width: 100%;
-  margin: clamp(1rem, 4vw, 2.5rem) auto;
-  padding: 0 clamp(1rem, 4vw, 1.5rem);
-  background: url('Back.png') center/cover no-repeat fixed;
-  color: #ffffff;
-  border: 6px double #fff;
-  border-radius: 15px;
-  box-shadow: inset 0 0 15px 5px #444, 0 0 30px rgba(255, 255, 255, 0.1);
-  
+  max-width: 50rem;                /* 800px */
+  width: min(95%, 50rem);
+  margin-inline: auto;
+  margin-block: clamp(1rem, 4vw, 2.5rem);
+  padding-inline: clamp(1rem, 4vw, 1.5rem);
+  background: #0f0f0f;
+  border-radius: var(--radius-md);
 }
 
-
-/* Force all text inside body to white */
-body, body * {
-  color: #ffffff !important;
-  
+/* =========================================
+   Headings / Hero
+   ========================================= */
+#appName {
+  font-size: clamp(1.4rem, 6vw, 2.1rem);
+  font-weight: 400;
+  letter-spacing: 2px;
+  color: #fff !important;
+  background-image: url('farsh1.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding-block: 8%;
+  text-align: center;
+  border-end-start-radius: var(--radius-md);
+  border-end-end-radius: var(--radius-md);
 }
 
-/* Gold coffee‑cup watermark */
-
-
-
-/* ---------- HEADER ---------- */
-/*
-header{
-  text-align:center;
-  margin-bottom:clamp(1rem,4vw,1.5rem);
-  padding:clamp(.8rem,3vw,1.2rem) 0;
-  position:relative;
-  background:url('img/farsh.jpg') center;
-  color:#ffffff; 
-  border-radius:12px;
-  box-shadow:0 4px 8px rgba(247, 246, 245, 0.55);
-}*/
-
-
-#appName{
-  font-size:clamp(1.8rem,6vw,2.8rem);
-  font-weight:400;
-  font-size: 70px ;
-  letter-spacing:2px;
-  color:#ffffff; /* white */
-  text-shadow:0 0 5px rgba(255,255,255,.6);
-}
-#tagline{
-  font-size:clamp(1rem,4.5vw,1.35rem);
-  letter-spacing:1.5px;
-  color:#ffffff; /* white */
+#tagline {
+  font-size: clamp(1.1rem, 4.5vw, 1.65rem);
+  letter-spacing: 1.5px;
+  text-align: center;
 }
 
-/* ---------- LANGUAGE SELECTOR – simplified ---------- */
-#langSelect{
-  appearance:auto;                       /* keep native arrow */
-  margin:clamp(1rem,4vw,1.5rem) 0 clamp(1.2rem,5vw,2.4rem);
-  min-height:44px;                       /* finger‑friendly */
-  padding:0 1rem;
-  font-size:clamp(.95rem,3.5vw,1.1rem);
-  font-weight:600;
-  border:2px solid var(--gold);
-  border-radius:12px;
-  background:var(--coffee);
-  color:#ffffff; /* white text */
-  transition:background .25s ease,border-color .25s ease;
+header {
+  text-align: center;
+  margin-block: clamp(0.8rem, 3vw, 1rem);
 }
-#langSelect:hover{background:var(--coffee-light)}
-#langSelect:focus{
-  outline:none;
-  border-color:var(--gold-light);
-  box-shadow:0 0 0 3px rgba(0, 0, 0, 0.5);
+header > * { margin-block: .25rem; }
+
+/* =========================================
+   Right‑to‑Left (Arabic / Kurdish) Enhancements
+   ========================================= */
+[dir="rtl"] {
+  direction: rtl;
+  text-align: right;
+  font-weight: 700;
 }
 
-/* ---------- MODERN FLAT BUTTONS ---------- */
+/* Larger, bolder type for RTL item names & prices */
+[dir="rtl"] .menu-item .item-name {
+  font-size: clamp(2rem, 5vw, 3.6rem);
+  font-weight: 700;
+}
+[dir="rtl"] .menu-item .price {
+  font-size: clamp(1.25rem, 4.5vw, 1.7rem);
+  font-weight: 700;
+}
+
+/* =========================================
+   Buttons & Filters
+   ========================================= */
 button {
-  font-family:'Poppins','Scheherazade',Arial,serif;
-  font-weight:600;
-  border-radius:10px;
-  border:none;
-  cursor:pointer;
-  padding:clamp(.55rem,2vw,.72rem) clamp(1.2rem,4.5vw,1.6rem);
-  transition:background .25s ease,transform .18s ease,box-shadow .25s;
-  color: #ffffff; /* white text */
-  background: #272727; /* changed button bg color to dark teal */
-  box-shadow: 0 2px 4px rgba(0,95,115,.6), 0 4px 12px rgba(0,95,115,.8);
+  font-family: inherit;
+  font-weight: 600;
+  font-size: clamp(0.90rem, 3vw, 1.1rem);
+  border-radius: var(--radius-sm);
+  border: none;
+  cursor: pointer;
+  padding: clamp(0.35rem, 1vw, 0.5rem) clamp(0.8rem, 2.5vw, 1rem);
+  transition: background 0.25s ease, transform 0.18s ease, box-shadow 0.25s;
+  background: var(--coffee);
+  box-shadow: 0 1px 2px #ffd67e, 0 2px 6px #d6b05e;
 }
 button:hover {
-  background: #ff0000; /* lighter teal on hover */
+  background: color-mix(in srgb, var(--coffee) 80%, oklab(100% 0 -0.00011 / 0.411));
   transform: translateY(-2px);
-  box-shadow: 0 3px 5px #eb3406, 0 6px 14px rgb(255, 0, 0);
+  box-shadow: 0 3px 5px rgba(255, 255, 255, 0.753), 0 6px 14px rgba(255, 255, 255, 0.7);
 }
 button:active {
-  background: #001219; /* very dark teal on active */
-  box-shadow: 0 1px 2px rgba(0,18,25,.8) inset, 0 2px 6px rgba(0,18,25,.9);
+  background: var(--coffee-dark);
+  box-shadow: inset 0 1px 2px rgba(0, 18, 25, 0.8), 0 2px 6px rgba(0, 18, 25, 0.9);
   transform: translateY(0);
 }
 
-/* ---------- SECONDARY BUTTONS ---------- */
+/* Filter Buttons */
+#filterButtons {
+  margin-block: clamp(14px, 4vw, 20px);
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(8px, 3vw, 14px);
+  justify-content: center;
+}
+button,
 #filterButtons button,
 #adminBtn,
 #logoutBtn {
-  background: #003d4c; /* dark slate blue */
-  color: #ffffff;
-  border: 2px solid transparent;
-  box-shadow: 0 2px 4px rgba(0,61,76,.7), 0 4px 12px rgba(0,61,76,.5);
+  font-size: clamp(0.95rem, 3vw, 1.3rem);
+  padding: clamp(0.2rem, 1vw, 0.4rem) clamp(0.6rem, 2.5vw, 0.8rem); /* Smaller padding */
 }
 #filterButtons button:hover,
 #adminBtn:hover,
 #logoutBtn:hover {
-  background: #ff0000; /* lighter slate blue on hover */
+  background: #2b1a12;
 }
 #filterButtons button.active {
-  background: #e0250c; /* main button bg */
-  color: #000000;
-  border: 2px solid #0a9396;
+  background: #1b1b1b;
+  color: #000;
+  border: 1px solid #0a9396;
 }
 
-/* ---------- FILTER BUTTONS LAYOUT ---------- */
-#filterButtons {
-  margin:clamp(14px,4vw,20px) 0;
-  display:flex;
-  flex-wrap:wrap;
-  gap:clamp(8px,3vw,14px);
-  justify-content:center;
-}
-#filterButtons button {
-  font-size:clamp(.8rem,3vw,.98rem);
-  text-transform:uppercase;
-  padding:clamp(6px,1.8vw,8px) clamp(15px,4vw,20px);
-  border-radius:999px;
-}
 
-/* ---------- MENU SECTIONS ---------- */
+/* =========================================
+   Menu Sections & Items
+   ========================================= */
 .menu-section {
-  margin-bottom:clamp(1.8rem,6vw,3rem);
-  border-bottom:3px dotted var(--gold);
-  padding-bottom:clamp(.8rem,3vw,1.3rem);
+  margin-block-end: clamp(1.8rem, 6vw, 3rem);
+  border-block-end: 3px dotted var(--gold);
+  padding-block-end: clamp(.8rem, 3vw, 1.3rem);
 }
 .menu-section h2 {
-  font-size:clamp(1.4rem,5vw,2rem);
-  margin-bottom:clamp(.6rem,2.5vw,1.3rem);
-  color: #ffffff; /* white */
-  letter-spacing:1.6px;
-  font-weight:600;
-  text-shadow:0 0 6px rgba(212,175,55,.8);
+  color: var(--text-gold);
+    font-size: clamp(2.3rem, 5.2vw, 3.8rem);
+  margin-block-end: clamp(.6rem, 2.5vw, 1.3rem);
+  letter-spacing: 1.6px;
+  font-weight: 600;
+  text-shadow: 0 0 6px rgba(212, 175, 55, .8);
+}
+[dir="rtl"] .menu-section h2 {
+  color: var(--text-gold);
+   font-size: clamp(2.3rem, 5.2vw, 3.8rem);
+  margin-block-end: clamp(.6rem, 2.5vw, 1.3rem);
+  letter-spacing: 1.6px;
+  font-weight: 600;
+  text-shadow: 0 0 6px rgba(212, 175, 55, .8);
 }
 
-/* ---------- MENU ITEMS ---------- */
-html[dir="rtl"] .menu-section {
-  margin-bottom:clamp(1.8rem,6vw,3rem);
-  border-bottom:3px dotted var(--gold);
-  padding-bottom:clamp(.8rem,3vw,1.3rem);
-}
-html[dir="rtl"] .menu-section h2 {
-  font-size:clamp(1.4rem,5vw,2rem);
-  margin-bottom:clamp(.6rem,2.5vw,1.3rem);
-  color: #ffffff; /* white */
-  letter-spacing:1.6px;
-  font-weight:600;
-  text-shadow:0 0 6px rgba(212,175,55,.8);
-}
-
-html[dir="rtl"] .menu-item {
-  display: flex;
-  align-items: center;
-  margin: 0.5rem 0;
-  padding: 0.4rem 0.7rem;
-  border-radius: 10px;
-  flex-wrap: wrap;
-}
-html[dir="rtl"] .menu-item .item-name {
-  flex: 1;
-  min-width: 35%;
-   font-size: clamp(1.5rem, 3.5vw, 1.15rem);
-  font-weight: 700;
-  text-align: right;
-}
-html[dir="rtl"] .menu-item .price {
-  flex: 1;
-  min-width: 35%;
-  font-size: clamp(0.95rem, 3.5vw, 1.15rem);
-  font-weight: 700;
-  text-align: left;
-}
-
-html[dir="rtl"] header .appName {
-  font-size: clamp(1.8rem, 6vw, 2.8rem);
-  font-weight: 800;
-  text-align: center;
-}
-
-html[dir="rtl"] header .tagline {
-  font-size: 2rem;
-  font-weight: 800;
-  text-align: center;
-}
-
-
+/* Menu item layout adapts to viewport */
 .menu-item {
   display: flex;
   align-items: center;
-  margin: 0.5rem 0;
-  padding: 0.4rem 0.7rem;
-  border-radius: 10px;
+  justify-content: space-between;
+  gap: .8rem;
+  margin-block: .5rem;
+  padding: .6rem .8rem;
+  border-radius: var(--radius-sm);
   flex-wrap: wrap;
+  border-block-end: 1px solid #d89b00;
 }
- .menu-item .item-name {
-  flex: 1;
-  min-width: 35%;
-  font-size: clamp(1.5rem, 3.5vw, 1.15rem);
-  font-weight: 700;
-  text-align: left;
+.menu-item .actions {
+  display: flex;
+  gap: .3rem;
 }
- .menu-item .price {
-  flex: 1;
-  min-width: 35%;
-  font-size: clamp(0.95rem, 3.5vw, 1.15rem);
-  font-weight: 700;
-  text-align: right;
+.menu-item .actions button {
+  background: transparent;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
 }
-header .appName {
-  font-size: clamp(1.8rem, 6vw, 2.8rem);
-  font-weight: 800;
-  text-align: center;
+.menu-item .editBtn  { color: #4caf50; }
+.menu-item .deleteBtn{ color: #f44336; }
+
+/* stack content on very narrow screens */
+@media (max-width: var(--bp-xs)) {
+  .menu-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .menu-item .actions {
+    margin-top: .3rem;
+  }
 }
 
- header .tagline {
-  font-size: 2rem;
-  font-weight: 800;
-  text-align: center;
-}
-/* ---------- ADMIN PANEL / FORM (unchanged except text color) ---------- */
+/* =========================================
+   Admin Panel
+   ========================================= */
 #adminPanel {
-  background:rgba(0,0,0,.35);
-  border:4px double var(--gold);
-  border-radius:15px;
-  padding:clamp(1.2rem,5vw,2rem);
-  box-shadow:0 0 18px rgba(212,175,55,.35);
-  color:#353333; /* white text */
+  background: rgba(0, 0, 0, .35);
+  border: 4px double var(--gold);
+  border-radius: var(--radius-md);
+  padding: clamp(1.2rem, 5vw, 2rem);
+  box-shadow: 0 0 18px rgba(212, 175, 55, .35);
+  max-width: 32rem;
+  margin-inline: auto;
 }
 #adminPanel input,
 #adminPanel select {
-  padding:.6rem 1rem;
-  font-size:clamp(.95rem,3.5vw,1.1rem);
-  border:2px solid var(--gold);
-  border-radius:10px;
-  background:rgba(0,0,0,.45);
-  color:#645454; /* white */
-  box-shadow:inset 0 0 6px rgba(212,175,55,.35);
+  width: 100%;
+  padding: .6rem 1rem;
+  font-size: clamp(.9rem, 3vw, 1.05rem);
+  border: 2px solid var(--gold);
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, .06);
+  color: var(--text-gold);
+  box-shadow: inset 0 0 6px rgba(212, 175, 55, .35);
 }
 #adminPanel button {
-  margin-top:.5rem;
-  width:100%;
+  margin-block-start: .8rem;
+  width: 100%;
 }
 
-/* ---------- FOOTER ---------- */
+#adminPanel.editing {
+  border-color: #4caf50;
+  box-shadow: 0 0 8px #4caf50;
+  padding: .5rem;
+}
+
+/* =========================================
+   Footer
+   ========================================= */
 footer {
-  text-align:center;
-  margin-top:clamp(2rem,7vw,3.5rem);
-  color:#ffffff; /* white */
-  letter-spacing:2px;
-  font-size:clamp(.9rem,3.2vw,1.05rem);
-  border-top:3px solid var(--gold);
-  padding-top:clamp(.8rem,3vw,1.2rem);
+  text-align: center;
+  margin-block-start: clamp(2rem, 7vw, 3.5rem);
+  letter-spacing: 2px;
+  font-size: clamp(.9rem, 3.2vw, 1rem);
+  border-top: 3px solid var(--gold);
+  padding-block-start: clamp(.8rem, 3vw, 1.2rem);
+}
+#langSelect {
+  appearance: auto;
+  margin-block: clamp(1rem, 4vw, 1.5rem) clamp(1.2rem, 5vw, 2.4rem);
+  min-height: 45px; /* Reduced from 56px */
+  padding: 0.5rem 1rem; /* Slightly smaller padding */
+  font-size: clamp(0.95rem, 3vw, 1.1rem); /* Slightly smaller text */
+  font-weight: 600;
+  border: 2px solid var(--gold);
+  border-radius: var(--radius-sm);
+  background: var(--coffee);
+  transition: background 0.25s ease, border-color 0.25s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
-/* ---------- ULTRA‑SMALL SCREEN FIX ---------- */
-@media(max-width:360px){
-  header::before,header::after{display:none}
-  #filterButtons{gap:4px}
-  button,#filterButtons button{padding:.4rem .9rem;font-size:.78rem}
+#langSelect:hover {
+  background: #fbf0d8;
+}
+
+#langSelect:focus {
+  outline: none;
+  border-color: var(--gold-light);
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.45);
+}
+
+
+/* =========================================
+   LTR Font Tweaks
+   ========================================= */
+[dir="ltr"] { font-weight: 600; }
+[dir="ltr"] .menu-item .item-name {
+  font-size: clamp(1.15rem, 4vw, 1.65rem);
+  font-weight: 700;
+}
+[dir="ltr"] .menu-item .price {
+  font-size: clamp(1.05rem, 3.5vw, 1.45rem);
+  font-weight: 600;
+}
+
+/* =========================================
+   Responsive Utilities
+   ========================================= */
+@media (min-width: var(--bp-lg)) {
+  .menu-box { max-width: clamp(50rem, 70vw, 65rem); }
+  #appName { font-size: clamp(2rem, 4vw, 3rem); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}
+
+@media (hover: none) {
+  button:hover { transform: none; }
+}
+
+/* =========================================
+   Hero Section Optional Full‑Width Cover
+   ========================================= */
+.hero-section {
+  view-timeline-name: --hero-scroll;
+  view-timeline-axis: block;
+  animation-timeline: --hero-scroll;
+  animation-name: heroZoom;
+  animation-range: entry 0% cover 60%;
+  animation-fill-mode: both;
+}
+
+@keyframes heroZoom {
+  from { transform: scale(1); }
+  to   { transform: scale(1.15); }
 }

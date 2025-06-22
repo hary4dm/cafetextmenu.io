@@ -1,384 +1,285 @@
 <!DOCTYPE html>
 <html lang="en">
- <link rel="stylesheet" href="styles.css" />
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Hambana Café Menu</title>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="styles.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Hambana Café Menu</title>
 
-  <!-- ►► Inline CSS ◄◄ -->
-  <style>
-    /* Basic RTL support */
-    [dir="rtl"] { text-align: right; direction: rtl; }
+    <!-- Inline tweaks for the logo → responsive & consistently small -->
+<style>
+  /* Keeps the logo from dominating the header on any screen size */
+  .logo-img {
+    width: 190px;         /* Increased base size */
+    max-width: 35vw;      /* Increased max width */
+    height: auto;         /* Preserve aspect‑ratio */
+    object-fit: contain;  /* Scale nicely if you swap images of different proportions */
+    border-radius: 20%;
+  }
 
-    /* Enlarge Arabic and Kurdish fonts */
-    html[dir="rtl"] .menu-item .item-name { font-size: 1.3rem; font-weight: 700; }
-    html[dir="rtl"] header .appName        { font-size: clamp(1.8rem, 6vw, 2.8rem); font-weight: 800; }
-    html[dir="rtl"] header .tagline        { font-size: 2rem; font-weight: 800; }
-
-    header { text-align:center; margin:1rem 0; color:#fff; }
-    header > * { margin:0.25rem 0; }
-
-    /* Filter buttons */
-    #filterButtons button{
-      font-weight:600;border-radius:10px;cursor:pointer;
-      padding:0.5rem 1rem;margin:0.2rem;border:1px solid #ffffff;
-      background:#e9c44b;transition:background-color 0.3s;
+  /* A tad larger on tablets/desktop so it doesn’t look too tiny */
+  @media (min-width: 768px) {
+    .logo-img {
+      width: 200px;       /* Increased desktop size */
     }
-    #filterButtons button.active{background:#bda313;color:#fff;border-color:#a0522d;}
+  }
+</style>
 
-    /* Menu items */
-    .menu-item{margin-bottom:0.5rem;display:flex;justify-content:space-between;align-items:center;
-               border-bottom:1px solid #eee;padding-bottom:0.3rem;}
-    .menu-item .actions{display:flex;gap:0.3rem;}
-    .menu-item .actions button{border:none;background:transparent;cursor:pointer;font-size:1rem;}
-    .menu-item .editBtn  {color:#4caf50;}
-    .menu-item .deleteBtn{color:#f44336;}
+  </head>
 
-    /* Section headings */
-    .menu-section h2{border-bottom:2px solid #d2691e;padding-bottom:0.3rem;margin:1rem 0 0.5rem;}
+  <body>
+    <div class="menu-box">
+      <header>
+        <!-- Language‑specific logo -->
+        <img id="logoImg" class="logo-img" alt="Hambana Logo" />
 
-    /* Admin form multilingual inputs */
-    #addItemForm input.lang-name{width:calc(100% - 1rem);margin-bottom:0.4rem;padding:0.4rem;font-size:1rem;}
+        <!-- "Menu" / "القائمة" / "لیست" -->
+        <h3 id="tagline" class="tagline"></h3>
 
-    /* Optional: slightly enlarge all RTL menu sections */
- 
+        <!-- Language switcher -->
+        <select id="langSelect" title="Choose language"></select>
+      </header>
 
-    /* Highlight panel while editing */
-    #adminPanel.editing{border:2px solid #4caf50;box-shadow:0 0 8px #4caf50;padding:0.5rem;}
-  </style>
-</head>
+      <div id="filterButtons"></div>
+      <div id="menuContainer"></div>
 
-<body>
-<div class="menu-box">
-<header>
-  <h1 id="appName" class="appName" style="font-size:70px;"></h1>
-  <h3 id="tagline" class="tagline"></h3>
+      <footer>
+        <small id="footerName"></small>
+      </footer>
 
-  <select id="langSelect" title="Choose language"></select>
-  <button id="adminBtn"  style="display:none;">Admin</button>
-  <button id="logoutBtn" style="display:none;">Logout</button>
-</header>
-
-<!-- ► Admin panel right after header so it’s always near the top ◄ -->
-<div id="adminPanel" style="display:none;">
-  <h3 id="adminTitle" style="margin:0.5rem 0;">Admin Panel</h3>
-  <form id="addItemForm">
-    <input type="text"  class="lang-name" id="itemName_en" placeholder="Name (English)"  required />
-    <input type="text"  class="lang-name" id="itemName_ar" placeholder="الاسم (Arabic)"  required />
-    <input type="text"  class="lang-name" id="itemName_ku" placeholder="ناو (Kurdish)"   required />
-
-    <input type="number" id="itemPrice"    placeholder="Price"    required step="0.01" min="0" />
-    <select id="itemCategory" required>
-      <option value="coffee">Coffee</option>
-      <option value="icedcoffee">Iced Coffee</option>
-      <option value="tea">Tea</option>
-      <option value="freshjuice">Fresh Juice</option>
-      <option value="drinks">Drinks</option>
-      <option value="snacks">Snacks</option>
-      <option value="desserts">Desserts</option>
-    </select>
-
-    <button type="submit" id="saveBtn">Add</button>
-  </form>
-</div>
-
-<div id="filterButtons"></div>
-<div id="menuContainer"></div>
-
-<footer style="text-align:center;margin-top:2rem;"><small id="footerName"></small></footer>
-
-<!-- Template for a single menu line -->
-<template id="itemTpl">
-  <div class="menu-item">
-    <div class="item-name"></div>
-    <div class="price"></div>
-    <div class="actions" style="display:none;">
-      <button type="button" class="editBtn"   title="Edit">✏️</button>
-      <button type="button" class="deleteBtn" title="Delete">🗑️</button>
+      <!-- Template for a single menu line -->
+      <template id="itemTpl">
+        <div class="menu-item">
+          <div class="item-name"></div>
+          <div class="price"></div>
+        </div>
+      </template>
     </div>
-  </div>
-</template>
-</div>
-<!-- ►► Inline JavaScript ◄◄ -->
-<script>
-(function () {
-/* ========= Data & i18n ========= */
-const STORAGE_KEY = 'haryadMenu';
 
-const defaultItems = [
-  { id: 1,  cat: 'coffee',      names: { en: 'Espresso',     ar: 'إسبريسو',          ku: 'ئەسپریسو' },        price: 2.00 },
-  { id: 2,  cat: 'coffee',      names: { en: 'Cappuccino',   ar: 'كابتشينو',         ku: 'كاپپوچینو' },        price: 3.50 },
-  { id: 3,  cat: 'coffee',      names: { en: 'Latte',        ar: 'لاتيه',            ku: 'لاتێ' },             price: 3.00 },
-  { id: 4,  cat: 'icedcoffee',  names: { en: 'Iced Latte',   ar: 'لاتيه مثلجة',      ku: 'لاتێی سارد' },       price: 3.50 },
-  { id: 5,  cat: 'tea',         names: { en: 'Green Tea',    ar: 'شاي أخضر',         ku: 'چای سەوز' },          price: 1.50 },
-  { id: 6,  cat: 'freshjuice',  names: { en: 'Orange Juice', ar: 'عصير برتقال',      ku: 'شەربەتی پۆرتەقال' }, price: 2.50 },
-  { id: 7,  cat: 'drinks',      names: { en: 'Sparkling Water',ar:'ماء فوار',        ku: 'ئاوی فوار' },         price: 1.00 },
-  { id: 8,  cat: 'snacks',      names: { en: 'Chicken Sandwich',ar:'ساندويتش دجاج', ku: 'ساندویچی کەبەک' },   price: 5.00 },
-  { id: 9,  cat: 'snacks',      names: { en: 'Cheese Croissant',ar:'كرواسون جبنة',  ku: 'کرۆسانی پنیری' },     price: 2.50 },
-  { id: 10, cat: 'desserts',    names: { en: 'Chocolate Cake', ar:'كيك شوكولاتة',    ku: 'کیکی شکۆلاتە' },      price: 4.00 },
-  { id: 11, cat: 'desserts',    names: { en: 'Baklava',        ar:'بقلاوة',           ku: 'باقلەوا' },           price: 3.00 },
-];
+    <!-- ►► Inline JavaScript ◄◄ -->
+    <script>
+      (function () {
+        /* ========= Images for each language ========= */
+        const languageImages = {
+          en: "backen.jpg",   // English
+          ar: "backar.jpg",   // Arabic
+          ku: "back.jpg",      // Kurdish
+        };
 
-const languages = {
-  en: {
-    appName: 'Hambana', tagline: 'Menu', all: 'All',
-    sections:{coffee:'☕ Coffee', icedcoffee:'🧊 Iced Coffee', tea:'🍵 Tea', freshjuice:'🍹 Fresh Juice',
-              drinks:'🥤 Drinks', snacks:'🥪 Snacks', desserts:'🍰 Desserts'},
-    admin:'Admin', logout:'Logout', adminPanel:'Admin Panel', add:'Add',
-    placeholders:{name:'Name', price:'Price', category:'Category'},
-    edit:'Edit', save:'Save', cancel:'Cancel'
-  },
-  ar: {
-    appName:'هامبانە', tagline:'القائمة', all:'الكل',
-    sections:{coffee:'☕ قهوة', icedcoffee:'🧊 قهوة مثلجة', tea:'🍵 شاي', freshjuice:'🍹 عصير طازج',
-              drinks:'🥤 مشروبات', snacks:'🥪 وجبات', desserts:'🍰 حلويات'},
-    admin:'المشرف', logout:'خروج', adminPanel:'لوحة التحكم', add:'إضافة',
-    placeholders:{name:'الاسم', price:'السعر', category:'الفئة'},
-    edit:'تعديل', save:'حفظ', cancel:'إلغاء'
-  },
-  ku: {
-    appName:'هەمبانە', tagline:'لیست', all:'هەموو',
-    sections:{coffee:'☕ قاوە', icedcoffee:'🧊 قاوەی سارد', tea:'🍵 چای', freshjuice:'🍹شەربەتی فرێش',
-              drinks:'🥤 خواردنەوەکان', snacks:'🥪 خواردن', desserts:'🍰 شیرینی'},
-    admin:'بەڕێوەبەر', logout:'چوونەدەرەوە', adminPanel:'پەڕەی بەڕێوەبردن', add:'زیادکردن',
-    placeholders:{name:'ناو', price:'نرخ', category:'پۆل'},
-    edit:'دەستکاری', save:'هەڵگرتن', cancel:'هەڵوەشاندنەوە'
-  }
-};
+        /* ========= Data ========= */
+        const defaultItems = [
+          { id: 1, cat: "coffee", names: { en: "Espresso", ar: "إسبريسو", ku: "ئیسپرێسو" }, price: 2000 },
+          { id: 2, cat: "coffee", names: { en: "Arabica coffee", ar: "قهوة عربية", ku: "قاوەی عەرەبی" }, price: 1500 },
+          { id: 3, cat: "coffee", names: { en: "Kurdish coffee", ar: "القهوة قزوان", ku: "قاوەی قەزوان" }, price: 1500 },
+          { id: 4, cat: "coffee", names: { en: "Americano", ar: "أمريكانو", ku: "ئەمریکانۆ" }, price: 3000 },
+          { id: 5, cat: "coffee", names: { en: "Mocha", ar: "موكا", ku: "مۆکا" }, price: 3500 },
+          { id: 6, cat: "coffee", names: { en: "Latte macchiato", ar: "لاتيه ماكياتو", ku: "لاتێ ماکیتۆ" }, price: 3500 },
+          { id: 7, cat: "coffee", names: { en: "Cappuccino", ar: "كابتشينو", ku: "کاپوچینۆ" }, price: 3000 },
+          { id: 8, cat: "coffee", names: { en: "Flat white", ar: "فلات وايت", ku: "فلات وايت" }, price: 2500 },
+          { id: 9, cat: "coffee", names: { en: "Nescafé", ar: "نسكافيه", ku: "نیسكافە" }, price: 2000 },
+          { id: 10, cat: "coffee", names: { en: "Hot Chocolate", ar: "شوكولاتة ساخنة", ku: "شوکلاتەی گەرم" }, price: 2500 },
+          { id: 11, cat: "coffee", names: { en: "Milk", ar: "حليب", ku: "شیر" }, price: 1000 },
+          { id: 12, cat: "coffee", names: { en: "Honey & Milk", ar: "حليب والعسل", ku: "شیر و هەنگوین" }, price: 2000 },
+          { id: 13, cat: "icedcoffee", names: { en: "Iced coffee", ar: "كوفی المثلج", ku: "ئایس کۆفی" }, price: 3500 },
+          { id: 14, cat: "icedcoffee", names: { en: "Iced latte", ar: "لاتيه المثلج", ku: "ئایس لاتێ" }, price: 3500 },
+          { id: 15, cat: "icedcoffee", names: { en: "Iced americano", ar: "أمريكانو المثلج", ku: "ئایس ئەمریکانۆ" }, price: 3000 },
+          { id: 16, cat: "icedcoffee", names: { en: "Frappe", ar: "فرابي", ku: "فراپێ" }, price: 4000 },
+          { id: 17, cat: "icedcoffee", names: { en: "Iced mocha", ar: "موكا المثلج", ku: "ئایس مۆکا" }, price: 3500 },
+          { id: 18, cat: "icedcoffee", names: { en: "Iced cappuccino", ar: "كابتشينو المثلج", ku: "ئایس کاپوچینۆ" }, price: 3500 },
+          { id: 19, cat: "icedcoffee", names: { en: "Iced caramel macchiato", ar: "كراميل ماكياتو المثلج", ku: "ئایس کارامێڵی ماکیتۆ" }, price: 4000 },
+          { id: 20, cat: "icedcoffee", names: { en: "Iced Flat white", ar: "فلات وايت المثلج", ku: "ئایس فلات وايت" }, price: 3000 },
+          { id: 21, cat: "tea", names: { en: "Tea", ar: "شاي", ku: "چا" }, price: 500 },
+          { id: 22, cat: "tea", names: { en: "Green tea", ar: "شاي أخضر", ku: "چای سەوز" }, price: 500 },
+          { id: 23, cat: "tea", names: { en: "Milk & tea", ar: "شاي بحليب", ku: "شیر و چا" }, price: 1000 },
+          { id: 24, cat: "tea", names: { en: "Lemon tea", ar: "شاي بالليمون", ku: "چای لیمۆ" }, price: 500 },
+          { id: 25, cat: "tea", names: { en: "Ginger tea", ar: "شاي الزنجبيل", ku: "چای زەنجەفیل" }, price: 500 },
+          { id: 26, cat: "tea", names: { en: "Baibun tea", ar: "شاي بابونج", ku: "چای گوڵەبەیبوون" }, price: 500 },
+          { id: 27, cat: "tea", names: { en: "Mint herbal tea", ar: "شاي النعناع", ku: "چای نەعنا" }, price: 500 },
+          { id: 28, cat: "tea", names: { en: "Pomegranate tea", ar: "شاي رومان", ku: "چای هەنار" }, price: 500 },
+          { id: 29, cat: "tea", names: { en: "Matcha tea", ar: "شاي ماتشا", ku: "چای ماچا" }, price: 500 },
+          { id: 30, cat: "drinks", names: { en: "Water", ar: "ماء", ku: "ئاو" }, price: 250 },
+          { id: 31, cat: "drinks", names: { en: "Cola", ar: "كولا", ku: "کۆلا" }, price: 500 },
+          { id: 32, cat: "drinks", names: { en: "Dew", ar: "دیو", ku: "دیو" }, price: 500 },
+          { id: 33, cat: "drinks", names: { en: "Pepsi", ar: "بيبسي", ku: "پێپسی" }, price: 500 },
+          { id: 34, cat: "drinks", names: { en: "Mission", ar: "مشن", ku: "مشن" }, price: 750 },
+          { id: 35, cat: "drinks", names: { en: "Tiger", ar: "تايجر", ku: "تايگەر" }, price: 1000 },
+          { id: 36, cat: "drinks", names: { en: "Vinut", ar: "فینوت", ku: "ڤینۆت" }, price: 1000 },
+          { id: 37, cat: "drinks", names: { en: "Istak", ar: "إيستك", ku: "ئیستەک" }, price: 1000 },
+          { id: 38, cat: "drinks", names: { en: "Freez", ar: "فریز", ku: "فریز" }, price: 1500 },
+          { id: 39, cat: "drinks", names: { en: "Lemonat", ar: "ليمونات", ku: "لیمۆنات" }, price: 750 },
+          { id: 40, cat: "drinks", names: { en: "Ayran", ar: "عيران", ku: "دۆ" }, price: 1000 },
+          { id: 41, cat: "freshjuice", names: { en: "Orange", ar: "برتقال", ku: "پرتەقاڵ" }, price: 2000 },
+          { id: 42, cat: "freshjuice", names: { en: "Banana milk", ar: "حليب بنكهة الموز", ku: "شیرمۆز" }, price: 2000 },
+          { id: 43, cat: "freshjuice", names: { en: "Orange Lemonade", ar: "ليمون برتقال", ku: "لیمۆ و پرتەقاڵ" }, price: 2000 },
+          { id: 44, cat: "freshjuice", names: { en: "Maxiki", ar: "مكسيكي", ku: "مەکسیکی" }, price: 2500 },
+          { id: 45, cat: "freshjuice", names: { en: "Mojito", ar: "موخیتو", ku: "مۆهیتۆ" }, price: 2500 },
+          { id: 46, cat: "freshjuice", names: { en: "Hambana special", ar: "همبانه خاص", ku: "تایبەت بە هەمبانە" }, price: 3000 },
+          { id: 47, cat: "desserts", names: { en: "Muhalabi", ar: "محلبی", ku: "محەلەبی" }, price: 1000 },
+          { id: 48, cat: "desserts", names: { en: "Mix muhalabi", ar: "محلبی مزج", ku: "محەلەبی تێکەڵە" }, price: 1500 },
+          { id: 49, cat: "desserts", names: { en: "Turta", ar: "تورت", ku: "تورتە" }, price: 1500 },
+          { id: 50, cat: "desserts", names: { en: "Khsh khsh", ar: "خش خش", ku: "خش خش" }, price: 1500 },
+          { id: 51, cat: "snacks", names: { en: "Falafel", ar: "فلافل", ku: "فەلافل" }, price: 1000 },
+          { id: 52, cat: "snacks", names: { en: "Foga", ar: "دلیمیة", ku: "فۆگە" }, price: 2000 },
+          { id: 53, cat: "snacks", names: { en: "Rice and broth", ar: "تمن و مرک", ku: "برنج و شلەی سادە" }, price: 2500 },
+          { id: 54, cat: "snacks", names: { en: "Chicken and rice", ar: "تمن و دجاج", ku: "برنج و مریشک" }, price: 4000 },
+          { id: 55, cat: "snacks", names: { en: "Shifta", ar: "شفتة", ku: "شفتە" }, price: 1500 },
+          { id: 56, cat: "snacks", names: { en: "Fish", ar: "سمك", ku: "ماسی" }, price: 3500 },
+          { id: 57, cat: "snacks", names: { en: "Chickpea", ar: "حمص", ku: "نۆکاو" }, price: 1500 },
+          { id: 58, cat: "snacks", names: { en: "scrambled egg and tomato", ar: "مخلمة بالبيض", ku: "مەخلەمە بە هێلکە" }, price: 2500 },
+          { id: 59, cat: "snacks", names: { en: "scrambled egg and minced meat", ar: "مخلمة باللحم مثروم", ku: "مەخلەمە بە قیمە" }, price: 4000 },
+        ];
 
-let currentLang   = localStorage.getItem('lang') || 'en';
-let isAdmin       = false;
-let currentFilter = 'all';
-let editingId     = null;           // ID of item being edited
+        /* ========= Translations ========= */
+        const languages = {
+          en: {
+            tagline: "Menu",
+            all: "All",
+            sections: {
+              coffee: "☕ Coffee",
+              icedcoffee: "🧊 Iced Coffee",
+              tea: "🍵 Tea",
+              drinks: "🥤 Drinks",
+              freshjuice: "🍹 Fresh Juice",
+              desserts: "🍰 Desserts",
+              snacks: "🥪 Meal",
+            },
+          },
+          ar: {
+            tagline: "القائمة",
+            all: "الكل",
+            sections: {
+              coffee: "☕ قهوة",
+              icedcoffee: "🧊 قهوة مثلجة",
+              tea: "🍵 شاي",
+              freshjuice: "🍹 عصير طازج",
+              drinks: "🥤 مشروبات",
+              snacks: "🥪 وجبات",
+              desserts: "🍰 حلويات",
+            },
+          },
+          ku: {
+            tagline: "لیست",
+            all: "هەموو",
+            sections: {
+              coffee: "☕ قاوە",
+              icedcoffee: "🧊 قاوەی سارد",
+              tea: "🍵 چای",
+              freshjuice: "🍹شەربەتی فرێش",
+              drinks: "🥤 خواردنەوەکان",
+              snacks: "🥪 خواردن",
+              desserts: "🍰 شیرینی",
+            },
+          },
+        };
 
-/* === DOM shortcuts === */
-const langSelect     = document.getElementById('langSelect');
-const adminBtn       = document.getElementById('adminBtn');
-const logoutBtn      = document.getElementById('logoutBtn');
-const menuContainer  = document.getElementById('menuContainer');
-const itemTpl        = document.getElementById('itemTpl');
-const adminPanel     = document.getElementById('adminPanel');
-const addItemForm    = document.getElementById('addItemForm');
-const itemPriceIn    = document.getElementById('itemPrice');
-const itemCategoryIn = document.getElementById('itemCategory');
-const itemNameEnIn   = document.getElementById('itemName_en');
-const itemNameArIn   = document.getElementById('itemName_ar');
-const itemNameKuIn   = document.getElementById('itemName_ku');
+        /* ========= State ========= */
+        let currentLang = localStorage.getItem("lang") || "en";
+        let currentFilter = "all";
 
-const filterButtons  = document.getElementById('filterButtons');
-const appNameEl      = document.getElementById('appName');
-const taglineEl      = document.getElementById('tagline');
+        /* ========= DOM ========= */
+        const langSelect = document.getElementById("langSelect");
+        const menuContainer = document.getElementById("menuContainer");
+        const itemTpl = document.getElementById("itemTpl");
+        const filterButtons = document.getElementById("filterButtons");
+        const taglineEl = document.getElementById("tagline");
+        const logoImg = document.getElementById("logoImg");
 
-/* === Helpers === */
-const categories = ['all','coffee','icedcoffee','tea','freshjuice','drinks','snacks','desserts'];
-const loadItems  = () => JSON.parse(localStorage.getItem(STORAGE_KEY)) || defaultItems;
-const saveItems  = items => localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-const t          = path => path.split('.').reduce((o,k)=>o&&o[k], languages[currentLang]) || path;
-const nextId     = items => items.length ? Math.max(...items.map(i=>i.id)) + 1 : 1;
+        /* ========= Helpers ========= */
+        const categories = ["all", "coffee", "icedcoffee", "tea", "drinks", "freshjuice", "desserts", "snacks"];
+        const loadItems = () => defaultItems;
+        const t = (path) => path.split(".").reduce((o, k) => o && o[k], languages[currentLang]) || path;
 
-/* ========= UI RENDERING ========= */
-function renderFilterButtons() {
-  filterButtons.innerHTML = '';
-  categories.forEach(cat => {
-    const btn = document.createElement('button');
-    btn.dataset.cat = cat;
-    btn.textContent = cat === 'all' ? t('all') : t(`sections.${cat}`);
-    if (cat === currentFilter) btn.classList.add('active');
-    filterButtons.appendChild(btn);
-  });
-}
-
-function renderMenu() {
-  menuContainer.innerHTML = '';
-  const items = loadItems();
-  const cats  = categories.slice(1);
-  const show  = currentFilter === 'all' ? cats : [currentFilter];
-
-  show.forEach(cat => {
-    const sec = document.createElement('section');
-    sec.className = 'menu-section';
-    const h2 = document.createElement('h2');
-    h2.textContent = t(`sections.${cat}`);
-    sec.appendChild(h2);
-
-    items.filter(i => i.cat === cat).forEach(i => {
-      const node = itemTpl.content.cloneNode(true);
-      const displayName = (i.names && i.names[currentLang]) || (i.names && i.names.en) || 'Unnamed';
-      const container = node.querySelector('.menu-item');
-
-      container.querySelector('.item-name').textContent = displayName;
-      container.querySelector('.price').textContent = `IQD ${Math.round(i.price)}`;
-
-      /* Toggle action buttons */
-      const actions = container.querySelector('.actions');
-      if (isAdmin) actions.style.display = 'flex';
-
-      /* DELETE */
-      actions.querySelector('.deleteBtn').onclick = () => {
-        if (confirm('Delete this item?')) {
-          saveItems(loadItems().filter(item => item.id !== i.id));
-          renderMenu();
+        /* ========= Renderers ========= */
+        function renderFilterButtons() {
+          filterButtons.innerHTML = "";
+          categories.forEach((cat) => {
+            const btn = document.createElement("button");
+            btn.dataset.cat = cat;
+            btn.textContent = cat === "all" ? t("all") : t(`sections.${cat}`);
+            if (cat === currentFilter) btn.classList.add("active");
+            filterButtons.appendChild(btn);
+          });
         }
-      };
 
-      /* EDIT */
-      actions.querySelector('.editBtn').onclick = () => {
-        editingId = i.id;
-        itemNameEnIn.value  = i.names.en;
-        itemNameArIn.value  = i.names.ar;
-        itemNameKuIn.value  = i.names.ku;
-        itemPriceIn.value   = i.price;
-        itemCategoryIn.value = i.cat;
+        function renderMenu() {
+          menuContainer.innerHTML = "";
+          const items = loadItems();
+          const cats = categories.slice(1);
+          const show = currentFilter === "all" ? cats : [currentFilter];
 
-        document.getElementById('saveBtn').textContent = t('save');
-        adminPanel.classList.add('editing');
-        adminPanel.scrollIntoView({ behavior:'smooth', block:'start' });
-      };
+          show.forEach((cat) => {
+            const sec = document.createElement("section");
+            sec.className = "menu-section";
+            const h2 = document.createElement("h2");
+            h2.textContent = t(`sections.${cat}`);
+            sec.appendChild(h2);
 
-      sec.appendChild(container);
-    });
+            items
+              .filter((i) => i.cat === cat)
+              .forEach((i) => {
+                const node = itemTpl.content.cloneNode(true);
+                const displayName = (i.names && i.names[currentLang]) || (i.names && i.names.en) || "Unnamed";
+                const container = node.querySelector(".menu-item");
 
-    menuContainer.appendChild(sec);
-  });
-}
+                container.querySelector(".item-name").textContent = displayName;
+                container.querySelector(".price").textContent = `IQD ${Math.round(i.price)}`;
 
-function renderUIStrings() {
-  appNameEl.textContent = t('appName');
-  taglineEl.textContent = t('tagline');
-  adminBtn.textContent  = t('admin');
-  logoutBtn.textContent = t('logout');
-  document.getElementById('adminTitle').textContent = t('adminPanel');
-  document.getElementById('saveBtn').textContent = editingId ? t('save') : t('add');
-  itemPriceIn.placeholder = t('placeholders.price');
-  /* Re‑render category <option>s in current language */
-  itemCategoryIn.innerHTML = '';
-  ['coffee','icedcoffee','tea','freshjuice','drinks','snacks','desserts'].forEach(c => {
-    const o = document.createElement('option');
-    o.value = c;
-    o.textContent = t(`sections.${c}`);
-    itemCategoryIn.appendChild(o);
-  });
-  document.getElementById('footerName').textContent = t('appName');
-}
+                sec.appendChild(container);
+              });
 
-function updateDirection() {
-  const rtl = (currentLang === 'ar' || currentLang === 'ku');
-  document.documentElement.dir = rtl ? 'rtl' : 'ltr';
-  filterButtons.style.direction = rtl ? 'rtl' : 'ltr';
-}
+            menuContainer.appendChild(sec);
+          });
+        }
 
-/* ========= ADMIN TOGGLE ========= */
-function enableAdmin() {
-  isAdmin = true;
-  adminPanel.style.display = 'block';
-  logoutBtn.style.display = 'inline-block';
-  renderMenu();              // show edit/delete icons
-}
-function disableAdmin() {
-  isAdmin = false;
-  adminPanel.style.display = 'none';
-  logoutBtn.style.display   = 'none';
-  editingId = null;
-  addItemForm.reset();
-  adminPanel.classList.remove('editing');
-  document.getElementById('saveBtn').textContent = t('add');
-  renderMenu();
-}
+        function renderUIStrings() {
+          taglineEl.textContent = t("tagline");
+          logoImg.src = languageImages[currentLang] || "Back.png";
+          document.getElementById("footerName").textContent = "";
+        }
 
-/* ========= EVENT BINDINGS ========= */
-langSelect.onchange = () => {
-  currentLang = langSelect.value;
-  localStorage.setItem('lang', currentLang);
-  renderUIStrings(); renderFilterButtons(); renderMenu(); updateDirection();
-};
+        function updateDirection() {
+          const rtl = currentLang === "ar" || currentLang === "ku";
+          document.documentElement.dir = rtl ? "rtl" : "ltr";
+          filterButtons.style.direction = rtl ? "rtl" : "ltr";
+        }
 
-filterButtons.onclick = e => {
-  if (e.target.tagName === 'BUTTON') {
-    [...filterButtons.children].forEach(b => b.classList.remove('active'));
-    e.target.classList.add('active');
-    currentFilter = e.target.dataset.cat;
-    renderMenu();
-  }
-};
+        /* ========= Event bindings ========= */
+        langSelect.onchange = () => {
+          currentLang = langSelect.value;
+          localStorage.setItem("lang", currentLang);
+          renderUIStrings();
+          renderFilterButtons();
+          renderMenu();
+          updateDirection();
+        };
 
-addItemForm.onsubmit = e => {
-  e.preventDefault();
-  if (!itemNameEnIn.value.trim() || !itemNameArIn.value.trim() || !itemNameKuIn.value.trim())
-    return alert('Please fill all name fields for all languages.');
+        filterButtons.onclick = (e) => {
+          if (e.target.tagName === "BUTTON") {
+            [...filterButtons.children].forEach((b) => b.classList.remove("active"));
+            e.target.classList.add("active");
+            currentFilter = e.target.dataset.cat;
+            renderMenu();
+          }
+        };
 
-  const price = parseFloat(itemPriceIn.value);
-  if (isNaN(price) || price < 0) return alert(t('placeholders.price') + ' invalid');
+        /* ========= Initial render ========= */
+        renderLangOptions();
+        renderUIStrings();
+        renderFilterButtons();
+        renderMenu();
+        updateDirection();
 
-  const items = loadItems();
-
-  if (editingId) {
-    /* update existing */
-    const idx = items.findIndex(item => item.id === editingId);
-    if (idx > -1) {
-      items[idx] = {
-        id: editingId,
-        cat: itemCategoryIn.value,
-        names:{ en:itemNameEnIn.value.trim(), ar:itemNameArIn.value.trim(), ku:itemNameKuIn.value.trim() },
-        price
-      };
-    }
-    editingId = null;
-    adminPanel.classList.remove('editing');
-    document.getElementById('saveBtn').textContent = t('add');
-  } else {
-    /* add new */
-    items.push({
-      id: nextId(items),
-      cat: itemCategoryIn.value,
-      names:{ en:itemNameEnIn.value.trim(), ar:itemNameArIn.value.trim(), ku:itemNameKuIn.value.trim() },
-      price
-    });
-  }
-
-  saveItems(items);
-  addItemForm.reset();
-  renderMenu();
-};
-
-logoutBtn.onclick = disableAdmin;
-
-/* === Easter‑egg tap / long‑press / key combo to enter admin mode === */
-let tap = 0, timer = null;
-appNameEl.onclick = () => {
-  tap++; clearTimeout(timer);
-  timer = setTimeout(() => tap = 0, 1000);
-  if (tap === 5) { if (prompt('Enter admin password:') === 'admin123') enableAdmin(); tap = 0; }
-};
-let hold = null;
-const startHold = () => { hold = setTimeout(()=>{ if (prompt('Enter admin password:')==='admin123') enableAdmin(); },2000); };
-const stopHold  = () => clearTimeout(hold);
-['mousedown','touchstart'].forEach(ev => taglineEl.addEventListener(ev,startHold));
-['mouseup','mouseleave','touchend','touchcancel'].forEach(ev => taglineEl.addEventListener(ev,stopHold));
-document.addEventListener('keydown', e=>{
-  if (e.ctrlKey && e.shiftKey && e.key.toLowerCase()==='a')
-    if (prompt('Enter admin password:')==='admin123') enableAdmin();
-});
-
-/* ========= INITIAL RENDER ========= */
-renderLangOptions();
-renderUIStrings();
-renderFilterButtons();
-renderMenu();
-updateDirection();
-
-function renderLangOptions(){
-  langSelect.innerHTML='';
-  Object.keys(languages).forEach(k=>{
-    const o=document.createElement('option');
-    o.value=k; o.textContent=k.toUpperCase();
-    if (k===currentLang) o.selected=true;
-    langSelect.appendChild(o);
-  });
-}
-
-})();
-</script>
-
-</body>
+        function renderLangOptions() {
+          langSelect.innerHTML = "";
+          Object.keys(languages).forEach((k) => {
+            const o = document.createElement("option");
+            o.value = k;
+            o.textContent = k.toUpperCase();
+            if (k === currentLang) o.selected = true;
+            langSelect.appendChild(o);
+          });
+        }
+      })();
+    </script>
+  </body>
 </html>
