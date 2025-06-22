@@ -100,7 +100,7 @@ header > * { margin-block: .25rem; }
 }
 [dir="rtl"] .menu-item .price {
   font-size: clamp(1.25rem, 4.5vw, 1.7rem);
-   background-color: #d89b008a;
+   background-color: #ffd000;
   border-radius: 5px ;
   font-weight: 700;
 }
@@ -301,7 +301,7 @@ footer {
 }
 [dir="ltr"] .menu-item .price {
   font-size: clamp(1.05rem, 3.5vw, 1.45rem);
-  background-color: #d89b008a;
+  background-color: #ffd000;
   border-radius: 5px ;
   font-weight: 600;
 }
